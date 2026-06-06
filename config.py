@@ -52,6 +52,10 @@ MAX_PRODUCTS_PER_CATEGORY = 20
 REPORT_OUTPUT_DIR = "reports"
 TRENDS_TOP_PRODUCTS = 30
 
+# ─── Credentiale Slickdeals ─────────────────────────────────────────────────
+SLICKDEALS_EMAIL    = ""   # pune email-ul tau de Slickdeals
+SLICKDEALS_PASSWORD = ""   # pune parola ta de Slickdeals
+
 # ─── Setari site public GitHub Pages ────────────────────────────────────────
 SITE_NAME      = "Best Picks Hub"
 SITE_TAGLINE   = "Top Amazon products, handpicked daily"

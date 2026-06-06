@@ -19,6 +19,7 @@ from agents.margin_calculator import enrich_products_with_margins
 from agents.affiliate_agent import enrich_with_affiliate
 from agents.report_generator import generate_report
 from agents.promo_agent import run as generate_promos
+from agents.slickdeals_agent import run as post_slickdeals
 
 
 def main():
@@ -78,6 +79,10 @@ def main():
             webbrowser.open(f"file:///{os.path.abspath(promo_path).replace(os.sep, '/')}")
         except Exception:
             pass
+
+    # Posteaza pe Slickdeals
+    print("\n  Postez deal pe Slickdeals automat...")
+    post_slickdeals(full_auto=True)
 
     # Deploy site public GitHub Pages
     print("\n  Vrei sa actualizezi si site-ul public? (y/n): ", end="", flush=True)
