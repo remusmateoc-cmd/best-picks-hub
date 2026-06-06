@@ -19,6 +19,7 @@ from config import (
 
 SLICKDEALS_LOGIN_URL = "https://slickdeals.net/account/login/"
 SLICKDEALS_DEAL_URL  = "https://slickdeals.net/share-a-deal/"
+SITE_URL = "https://remusmateoc-cmd.github.io/best-picks-hub"
 
 DEAL_TEMPLATES = {
     "Electronics": {
@@ -118,17 +119,20 @@ def _build_deal(product: dict) -> dict:
     stars = "⭐" * int(rating) if rating else ""
     deal_title = f"[Amazon] {title[:70]} - ${price:.2f}"
 
+    # Posteaza link catre site-ul tau (nu afiliat direct) — acceptat de Slickdeals
+    site_link = SITE_URL
+
     description = f"""Found this {tmpl['category'].lower()} deal on Amazon — one of their current bestsellers.
 
 {stars} {f"{rating}/5 stars from thousands of verified buyers" if rating else ""}
 ✅ Amazon Bestseller — consistently top-ranked
 ✅ {tmpl['desc_suffix']}
 
-Great find if you've been looking for this type of product."""
+Full review + direct Amazon link: {site_link}"""
 
     return {
         "title":       deal_title,
-        "url":         link,
+        "url":         site_link,   # link catre site-ul tau, nu afiliat direct
         "store":       "Amazon",
         "price":       f"{price:.2f}",
         "category":    tmpl["category"],
