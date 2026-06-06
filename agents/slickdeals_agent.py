@@ -147,43 +147,45 @@ def _post_via_playwright(deal: dict, full_auto: bool):
         print("  [!] Playwright nu e instalat: pip install playwright && playwright install chromium")
         return
 
-    BRAVE_PATH = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
+    BRAVE_PATH    = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
+    BRAVE_PROFILE = r"C:\Users\Boss\AppData\Local\BraveSoftware\Brave-Browser\User Data"
 
     with sync_playwright() as p:
-        browser = p.chromium.launch(
+        # Folosim profilul real Brave — cookies/sesiune existente, fara CAPTCHA
+        ctx = p.chromium.launch_persistent_context(
+            user_data_dir=BRAVE_PROFILE,
             executable_path=BRAVE_PATH,
             headless=False,
             slow_mo=80,
-            args=["--no-sandbox", "--disable-blink-features=AutomationControlled"]
-        )
-        ctx     = browser.new_context(
+            channel="chrome",
+            args=[
+                "--no-sandbox",
+                "--disable-blink-features=AutomationControlled",
+                "--profile-directory=Default",
+            ],
             viewport={"width": 1280, "height": 900},
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
         )
         page = ctx.new_page()
 
         try:
-            # 1. LOGIN
-            print("  -> Login Slickdeals...")
-            page.goto(SLICKDEALS_LOGIN_URL, wait_until="domcontentloaded", timeout=60000)
+            # 1. Verifica daca e deja logat (profilul Brave are sesiunea)
+            print("  -> Verific sesiunea Slickdeals...")
+            page.goto("https://slickdeals.net", wait_until="domcontentloaded", timeout=60000)
             _human_delay(2)
 
-            page.fill('input[name="username"], input[type="email"], #username', SLICKDEALS_EMAIL)
-            _human_delay(0.8)
-            page.fill('input[name="password"], input[type="password"], #password', SLICKDEALS_PASSWORD)
-            _human_delay(1.0)
-            page.click('button[type="submit"], input[type="submit"], .login-btn, button:has-text("Log In"), button:has-text("Sign In")')
-
-            # Asteapta verificare manuala (CAPTCHA / 2FA / email code)
-            print("\n  ================================================")
-            print("  Daca apare verificare (CAPTCHA/cod email),")
-            print("  completeaz-o MANUAL in browser.")
-            print("  Astept 60 secunde...")
-            print("  ================================================\n")
-            time.sleep(60)
-
-            page.wait_for_load_state("domcontentloaded", timeout=30000)
-            print("  -> Logat!")
+            # Daca nu e logat, fa login
+            if page.query_selector('a[href*="login"], .loginLink, a:has-text("Log In")'):
+                print("  -> Nu e logat, fac login...")
+                page.goto(SLICKDEALS_LOGIN_URL, wait_until="domcontentloaded", timeout=60000)
+                _human_delay(2)
+                page.fill('input[name="username"], input[type="email"], #username', SLICKDEALS_EMAIL)
+                _human_delay(0.8)
+                page.fill('input[name="password"], input[type="password"], #password', SLICKDEALS_PASSWORD)
+                _human_delay(1.0)
+                page.click('button[type="submit"], input[type="submit"], button:has-text("Log In"), button:has-text("Sign In")')
+                _human_delay(3)
+            else:
+                print("  -> Deja logat prin profilul Brave!")
 
             # 2. SHARE A DEAL PAGE
             _human_delay(2)
@@ -228,7 +230,7 @@ def _post_via_playwright(deal: dict, full_auto: bool):
             print("  Browserul ramane deschis 2 minute pentru debug...")
             time.sleep(120)
         finally:
-            browser.close()
+            ctx.close()
 
 
 def _fill_field(page, selectors: list, value: str):
