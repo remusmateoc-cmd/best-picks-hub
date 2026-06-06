@@ -61,6 +61,8 @@ def main():
 
     os.makedirs(DOCS_DIR, exist_ok=True)
     _write_index(public_products, categories)
+    _write_sitemap(public_products)
+    _write_robots()
     _write_nojekyll()
 
     print(f"  [+] Site generat in /{DOCS_DIR}/")
@@ -205,13 +207,45 @@ def _write_index(products: list[dict], categories: list[str]):
           </div>
         </div>"""
 
+    site_url   = "https://remusmateoc-cmd.github.io/best-picks-hub"
+    jsonld     = _jsonld_products(all_prods, site_url)
+    seo_title  = f"Best Amazon Deals Today — Top Picks {datetime.now().year} | {SITE_NAME}"
+    seo_desc   = f"Discover today's top Amazon bestsellers with expert reviews. Updated daily with the best deals on electronics, home, beauty, sports and more. Save money with {SITE_NAME}."
+
     html = f"""<!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="{SITE_TAGLINE} — Updated {date_str}">
-  <title>{SITE_NAME} — {SITE_TAGLINE}</title>
+
+  <!-- SEO Primary -->
+  <title>{seo_title}</title>
+  <meta name="description" content="{seo_desc}">
+  <meta name="keywords" content="amazon deals, amazon bestsellers, best amazon products, amazon reviews, top amazon picks, amazon affiliate, product recommendations, best deals today">
+  <meta name="author" content="{SITE_AUTHOR}">
+  <link rel="canonical" href="{site_url}/">
+
+  <!-- Open Graph (Facebook, WhatsApp, Messenger) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{site_url}/">
+  <meta property="og:title" content="{seo_title}">
+  <meta property="og:description" content="{seo_desc}">
+  <meta property="og:site_name" content="{SITE_NAME}">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{seo_title}">
+  <meta name="twitter:description" content="{seo_desc}">
+
+  <!-- Geo targeting USA -->
+  <meta name="geo.region" content="US">
+  <meta name="language" content="English">
+
+  <!-- Robots -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+
+  <!-- JSON-LD Structured Data (Google Rich Snippets) -->
+  <script type="application/ld+json">{jsonld}</script>
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -400,6 +434,111 @@ def _write_index(products: list[dict], categories: list[str]):
     path = os.path.join(DOCS_DIR, "index.html")
     with open(path, "w", encoding="utf-8") as f:
         f.write(html)
+    print(f"  [+] {path}")
+
+
+def _jsonld_products(products: list[dict], site_url: str) -> str:
+    """JSON-LD ItemList + Product schema — afiseaza produse cu pret/stele direct in Google."""
+    items = []
+    for i, p in enumerate(products[:10], 1):
+        link    = _affiliate_link(p)
+        rating  = p.get("rating")
+        agg_rating = {}
+        if rating:
+            agg_rating = {
+                "@type": "AggregateRating",
+                "ratingValue": rating,
+                "bestRating": 5,
+                "reviewCount": 100
+            }
+        item = {
+            "@type": "ListItem",
+            "position": i,
+            "item": {
+                "@type": "Product",
+                "name": p.get("title", ""),
+                "description": f"Top Amazon bestseller in {p.get('category','')}. Highly rated product with great value.",
+                "url": link,
+                "offers": {
+                    "@type": "Offer",
+                    "price": p.get("price", 0),
+                    "priceCurrency": "USD",
+                    "availability": "https://schema.org/InStock",
+                    "seller": {"@type": "Organization", "name": "Amazon"},
+                    "url": link,
+                },
+                **({"aggregateRating": agg_rating} if agg_rating else {})
+            }
+        }
+        items.append(item)
+
+    schema = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "ItemList",
+                "name": "Best Amazon Products Today",
+                "description": "Daily curated list of top Amazon bestsellers with expert reviews.",
+                "url": site_url,
+                "numberOfItems": len(items),
+                "itemListElement": items
+            },
+            {
+                "@type": "WebSite",
+                "name": SITE_NAME,
+                "url": site_url,
+                "description": SITE_TAGLINE,
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": f"{site_url}/#products",
+                    "query-input": "required name=search_term_string"
+                }
+            },
+            {
+                "@type": "Organization",
+                "name": SITE_AUTHOR,
+                "url": site_url,
+            }
+        ]
+    }
+    return json.dumps(schema, ensure_ascii=False)
+
+
+def _write_sitemap(products: list[dict]):
+    """Genereaza sitemap.xml pentru indexare rapida Google/Bing."""
+    today    = datetime.now().strftime("%Y-%m-%d")
+    site_url = "https://remusmateoc-cmd.github.io/best-picks-hub"
+
+    urls = [f"""  <url>
+    <loc>{site_url}/</loc>
+    <lastmod>{today}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>"""]
+
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{chr(10).join(urls)}
+</urlset>"""
+
+    path = os.path.join(DOCS_DIR, "sitemap.xml")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(xml)
+    print(f"  [+] {path}")
+
+
+def _write_robots():
+    """robots.txt — permite indexarea completa si indica sitemap-ul."""
+    site_url = "https://remusmateoc-cmd.github.io/best-picks-hub"
+    content  = f"""User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: {site_url}/sitemap.xml
+"""
+    path = os.path.join(DOCS_DIR, "robots.txt")
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
     print(f"  [+] {path}")
 
 

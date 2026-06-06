@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://remusmateoc-cmd.github.io/best-picks-hub/sitemap.xml

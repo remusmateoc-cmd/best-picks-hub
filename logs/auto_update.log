@@ -1,0 +1,74 @@
+[Sat 06/06/2026 23:17:22.02] === START UPDATE === 
+==============================================================
+  PRODUCT RESEARCH AGENT v1.0
+  06 June 2026, 23:17
+==============================================================
+  Agenti activi: Amazon | Trends | Margin | Affiliate | Report
+==============================================================
+
+[1/5] Colectez bestsellers de pe Amazon...
+
+[AGENT AMAZON] Scanez 8 categorii...
+  -> Electronics... 0 produse
+  -> Home & Kitchen... 0 produse
+  -> Sports & Outdoors... 3 produse
+  -> Toys & Games... 2 produse
+  -> Beauty... 0 produse
+  -> Health... 0 produse
+  -> Pet Supplies... 0 produse
+  -> Office Products... 2 produse
+     7 produse colectate din 3 categorii
+
+[2/5] Calculez margini de profit...
+
+[AGENT MARGIN] Calculez margini pentru 7 produse...
+  [+] 4 oportunitati bune | 3 de sarit
+
+[3/5] Analizez Google Trends...
+
+[AGENT TRENDS] Analizez 4 produse pe Google Trends...
+  [+] 1/4 produse in trend
+
+[4/5] Generez link-uri affiliate...
+
+[AGENT AFFILIATE] Generez link-uri affiliate pentru 7 produse...
+  [+] Link-uri generate pentru 7 produse
+
+[5/5] Generez raport HTML...
+
+==============================================================
+  RAPORT GENERAT IN 39s
+  Fisier: reports\report_20260606_231801.html
+==============================================================
+
+  Produse analizate : 7
+  EXCELLENT         : 3
+  GOOD              : 1
+
+  CEL MAI BUN PRODUS:
+  Disney Store Official Buzz Lightyear Interactive Talking A
+  Profit ~$25.84 | Marja 52.8%
+  Categorie: Toys & Games | Trend: falling
+
+  Raportul s-a deschis automat in browser.
+
+
+[6/6] Generez posturi de promovare...
+  [+] 14 posturi generate: promotions\promo_2026-06-06.html
+
+  Vrei sa actualizezi si site-ul public? (y/n): ========================================================
+  DEPLOY AGENT — Best Picks Hub
+========================================================
+  Produse pentru site: 4
+  Categorii: 3
+  [+] docs\index.html
+  [+] Site generat in /docs/
+  Tip: ruleaza 'python deploy.py --push' pentru a publica pe GitHub.
+
+[main 5f2589c] auto-update Sat 06/06/2026
+ 3 files changed, 470 insertions(+), 19 deletions(-)
+ create mode 100644 reports/data_20260606_231801.json
+ create mode 100644 reports/report_20260606_231801.html
+To https://github.com/remusmateoc-cmd/best-picks-hub.git
+   68236cb..5f2589c  main -> main
+[Sat 06/06/2026 23:18:03.86] === GATA === 
