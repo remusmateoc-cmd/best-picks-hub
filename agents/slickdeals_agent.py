@@ -147,8 +147,15 @@ def _post_via_playwright(deal: dict, full_auto: bool):
         print("  [!] Playwright nu e instalat: pip install playwright && playwright install chromium")
         return
 
+    BRAVE_PATH = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
+
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False, slow_mo=80)
+        browser = p.chromium.launch(
+            executable_path=BRAVE_PATH,
+            headless=False,
+            slow_mo=80,
+            args=["--no-sandbox", "--disable-blink-features=AutomationControlled"]
+        )
         ctx     = browser.new_context(
             viewport={"width": 1280, "height": 900},
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
