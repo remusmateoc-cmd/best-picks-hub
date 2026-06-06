@@ -158,22 +158,31 @@ def _post_via_playwright(deal: dict, full_auto: bool):
         try:
             # 1. LOGIN
             print("  -> Login Slickdeals...")
-            page.goto(SLICKDEALS_LOGIN_URL, wait_until="networkidle", timeout=30000)
-            _human_delay()
+            page.goto(SLICKDEALS_LOGIN_URL, wait_until="domcontentloaded", timeout=60000)
+            _human_delay(2)
 
             page.fill('input[name="username"], input[type="email"], #username', SLICKDEALS_EMAIL)
-            _human_delay(0.5)
-            page.fill('input[name="password"], input[type="password"], #password', SLICKDEALS_PASSWORD)
             _human_delay(0.8)
+            page.fill('input[name="password"], input[type="password"], #password', SLICKDEALS_PASSWORD)
+            _human_delay(1.0)
             page.click('button[type="submit"], input[type="submit"], .login-btn, button:has-text("Log In"), button:has-text("Sign In")')
-            page.wait_for_load_state("networkidle", timeout=15000)
+
+            # Asteapta verificare manuala (CAPTCHA / 2FA / email code)
+            print("\n  ================================================")
+            print("  Daca apare verificare (CAPTCHA/cod email),")
+            print("  completeaz-o MANUAL in browser.")
+            print("  Astept 60 secunde...")
+            print("  ================================================\n")
+            time.sleep(60)
+
+            page.wait_for_load_state("domcontentloaded", timeout=30000)
             print("  -> Logat!")
 
             # 2. SHARE A DEAL PAGE
-            _human_delay(1.5)
-            print("  -> Deschid formularul de deal...")
-            page.goto(SLICKDEALS_DEAL_URL, wait_until="networkidle", timeout=30000)
             _human_delay(2)
+            print("  -> Deschid formularul de deal...")
+            page.goto(SLICKDEALS_DEAL_URL, wait_until="domcontentloaded", timeout=60000)
+            _human_delay(3)
 
             # 3. COMPLETEAZA FORMULARUL
             _fill_field(page, ['input[name="title"]', '#deal-title', 'input[placeholder*="title"]'], deal["title"])
