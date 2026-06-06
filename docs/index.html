@@ -1,88 +1,275 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Top Amazon products, handpicked daily — Updated June 06, 2026">
   <title>Best Picks Hub — Top Amazon products, handpicked daily</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class', theme: { extend: {} } }</script>
+
+  <!-- Swiper.js -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
+  <!-- AOS Animations -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"/>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .filter-btn {
+      @apply px-4 py-2 rounded-full text-sm font-medium border border-gray-600 text-gray-300
+             hover:border-yellow-400 hover:text-yellow-400 transition-all duration-200 whitespace-nowrap;
+    }
+    .active-btn {
+      @apply bg-yellow-400 text-gray-900 border-yellow-400 font-bold;
+    }
+    .swiper { padding-bottom: 40px !important; }
+    .swiper-pagination-bullet { background: #facc15; }
+    .swiper-pagination-bullet-active { background: #facc15; }
+    .featured-card { min-height: 320px; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #1f2937; }
+    ::-webkit-scrollbar-thumb { background: #facc15; border-radius: 3px; }
+  </style>
 </head>
-<body>
 
-<header>
-  <div class="header-inner">
-    <div class="logo">🛍️ Best Picks Hub</div>
-    <p class="tagline">Top Amazon products, handpicked daily</p>
-  </div>
-</header>
+<body class="bg-gray-900 text-gray-100 dark">
 
-<section class="hero">
-  <h1>Today's Best Amazon Picks</h1>
-  <p>Curated from Amazon's bestseller lists — updated daily</p>
-  <div class="hero-stats">
-    <div class="hstat"><strong>2</strong><span>Top Products</span></div>
-    <div class="hstat"><strong>1</strong><span>Categories</span></div>
-    <div class="hstat"><strong>Daily</strong><span>Updated</span></div>
-  </div>
-</section>
-
-<section class="filters">
-  <div class="container">
-    <button class="filter-btn active" onclick="filter('all')">All</button>
-      <button class="filter-btn" onclick="filter('Office Products')">💼 Office Products</button>
-
-  </div>
-</section>
-
-<main class="container">
-  <p class="update-note">Last updated: June 06, 2026</p>
-  <div class="grid" id="grid">
-    
-      <div class="card" data-category="Office Products">
-        <div class="card-cat">💼 Office Products</div>
-        <h3 class="card-title">HP 64 Black & Tri-Color Ink Cartridges Printers (Combo Pack) | Works with Printer Series: Inspire 7950e; Envy Photo 6200, 7100, 7800; Tango | Eligible for Instant Ink | X4D92AN</h3>
-        <div class="card-meta">
-          <span class='stars'>★★★★½</span> <span class='rating-num'>4.6</span>
-          <span class="trend-badge trend-down">📉 Falling</span>
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-2">
+          <i class="fa-brands fa-amazon text-yellow-400 text-2xl"></i>
+          <span class="text-xl font-black text-white">Best Picks Hub</span>
         </div>
-        <div class="card-price">$55.89</div>
-        <a class="btn-buy" href="https://www.amazon.com/HP-Tri-Color-Original-Cartridges-N9J90AN/dp/B06ZY9LP74/ref=zg_bs_g_office-products_d_sccl_6/132-7826456-1049511?psc=1" target="_blank" rel="noopener sponsored">
-          🛒 View on Amazon
-        </a>
-      </div>
-      <div class="card" data-category="Office Products">
-        <div class="card-cat">💼 Office Products</div>
-        <h3 class="card-title">HP 67 Black/Tri-Color Ink Cartridges (2-Pack) | Works with DeskJet 1255, 2700, 4100, Envy 6000, 6400 | Instant Ink Eligible | 3YP29AN | Packaging May Vary</h3>
-        <div class="card-meta">
-          <span class='stars'>★★★★½</span> <span class='rating-num'>4.6</span>
-          <span class="trend-badge trend-up">📈 Rising</span>
+        <div class="flex items-center gap-4">
+          <span class="text-xs text-gray-400 hidden sm:block">Updated June 06, 2026</span>
+          <a href="#products" class="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold text-sm px-4 py-2 rounded-lg transition-all">
+            Browse Deals
+          </a>
         </div>
-        <div class="card-price">$49.00</div>
-        <a class="btn-buy" href="https://www.amazon.com/HP-Cartridges-Black-Tri-Color-3YP29AN/dp/B08412HXK9/ref=zg_bs_g_office-products_d_sccl_2/132-7826456-1049511?psc=1" target="_blank" rel="noopener sponsored">
-          🛒 View on Amazon
-        </a>
       </div>
-  </div>
-</main>
+    </div>
+  </nav>
 
-<footer>
-  <div class="container">
-    <p><strong>Affiliate Disclosure:</strong> Best Picks Hub is a participant in the Amazon Services LLC
-    Associates Program, an affiliate advertising program designed to provide a means for sites to earn
-    advertising fees by advertising and linking to Amazon.com.</p>
-    <p style="margin-top:8px;color:#999">© 2026 Best Picks Hub · Updated June 06, 2026</p>
-  </div>
-</footer>
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-20 px-4">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-10 left-10 w-72 h-72 bg-yellow-400 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative max-w-4xl mx-auto text-center" data-aos="fade-up">
+      <div class="inline-flex items-center gap-2 bg-yellow-400/10 border border-yellow-400/30 text-yellow-400 text-sm font-semibold px-4 py-2 rounded-full mb-6">
+        <i class="fa-solid fa-fire-flame-curved animate-pulse"></i>
+        Daily Updated Amazon Bestsellers
+      </div>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-white mb-4 leading-tight">
+        Find the Best<br><span class="text-yellow-400">Amazon Deals</span> Today
+      </h1>
+      <p class="text-gray-400 text-lg max-w-2xl mx-auto mb-8">Top Amazon products, handpicked daily</p>
+      <div class="flex justify-center gap-8 flex-wrap">
+        <div class="text-center">
+          <div class="text-3xl font-black text-yellow-400">2+</div>
+          <div class="text-gray-400 text-sm">Top Products</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-black text-yellow-400">1</div>
+          <div class="text-gray-400 text-sm">Categories</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-black text-yellow-400">Daily</div>
+          <div class="text-gray-400 text-sm">Updated</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<script>
-function filter(cat) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('.card').forEach(c => {
-    c.style.display = (cat === 'all' || c.dataset.category === cat) ? 'flex' : 'none';
-  });
-}
-</script>
+  <!-- FEATURED CAROUSEL -->
+  <section class="py-12 px-4 bg-gray-900">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center gap-3 mb-8" data-aos="fade-right">
+        <div class="w-1 h-8 bg-yellow-400 rounded-full"></div>
+        <h2 class="text-2xl font-black text-white">Featured Picks</h2>
+        <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-pulse">HOT</span>
+      </div>
+      <div class="swiper featuredSwiper" data-aos="fade-up" data-aos-delay="100">
+        <div class="swiper-wrapper">
+          
+        <div class="swiper-slide">
+          <div class="featured-card bg-gradient-to-br from-slate-500 to-gray-700 rounded-2xl p-6 h-full flex flex-col justify-between text-white shadow-2xl">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+                  <i class="fa-solid fa-briefcase mr-1"></i>Office Products
+                </span>
+                
+              </div>
+              <h3 class="text-lg font-bold leading-tight mb-3">HP 64 Black & Tri-Color Ink Cartridges Printers (Combo Pack) | Works with P</h3>
+              <div class="text-yellow-300 text-sm mb-1">★★★★½</div>
+              <div class='text-white/70 text-xs'>4.6 / 5 stars</div>
+            </div>
+            <div class="mt-4">
+              <div class="text-3xl font-black mb-4">$55.89</div>
+              <a href="https://www.amazon.com/HP-Tri-Color-Original-Cartridges-N9J90AN/dp/B06ZY9LP74/ref=zg_bs_g_office-products_d_sccl_6/132-7826456-1049511?psc=1" target="_blank" rel="noopener sponsored"
+                 class="block w-full text-center bg-white text-gray-900 font-bold py-3 px-4 rounded-xl hover:bg-yellow-300 transition-all duration-200 shadow-lg">
+                <i class="fa-brands fa-amazon mr-2"></i>View on Amazon
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="featured-card bg-gradient-to-br from-slate-500 to-gray-700 rounded-2xl p-6 h-full flex flex-col justify-between text-white shadow-2xl">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+                  <i class="fa-solid fa-briefcase mr-1"></i>Office Products
+                </span>
+                <span class="inline-flex items-center gap-1 bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full"><i class="fa-solid fa-arrow-trend-up"></i> Trending</span>
+              </div>
+              <h3 class="text-lg font-bold leading-tight mb-3">HP 67 Black/Tri-Color Ink Cartridges (2-Pack) | Works with DeskJet 1255, 27</h3>
+              <div class="text-yellow-300 text-sm mb-1">★★★★½</div>
+              <div class='text-white/70 text-xs'>4.6 / 5 stars</div>
+            </div>
+            <div class="mt-4">
+              <div class="text-3xl font-black mb-4">$49.00</div>
+              <a href="https://www.amazon.com/HP-Cartridges-Black-Tri-Color-3YP29AN/dp/B08412HXK9/ref=zg_bs_g_office-products_d_sccl_2/132-7826456-1049511?psc=1" target="_blank" rel="noopener sponsored"
+                 class="block w-full text-center bg-white text-gray-900 font-bold py-3 px-4 rounded-xl hover:bg-yellow-300 transition-all duration-200 shadow-lg">
+                <i class="fa-brands fa-amazon mr-2"></i>View on Amazon
+              </a>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div class="swiper-pagination"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALL PRODUCTS -->
+  <section id="products" class="py-12 px-4 bg-gray-950">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex items-center gap-3 mb-6" data-aos="fade-right">
+        <div class="w-1 h-8 bg-yellow-400 rounded-full"></div>
+        <h2 class="text-2xl font-black text-white">All Products</h2>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex gap-2 flex-wrap mb-8 overflow-x-auto pb-2" data-aos="fade-up">
+        <button onclick="filterCat('all', this)" class="filter-btn active-btn">All</button><button onclick="filterCat('Office_Products', this)" class="filter-btn"><i class="fa-solid fa-briefcase mr-1"></i>Office Products</button>
+      </div>
+
+      <!-- Grid -->
+      <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        
+        <div class="product-card group bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col" data-cat="Office_Products">
+          <div class="h-2 bg-gradient-to-r from-slate-500 to-gray-700"></div>
+          <div class="p-5 flex flex-col flex-1">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">
+                <i class="fa-solid fa-briefcase mr-1"></i>Office Products
+              </span>
+              <span class="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full"><i class="fa-solid fa-arrow-trend-down mr-1"></i>Falling</span>
+            </div>
+            <h3 class="text-white font-semibold text-sm leading-snug mb-3 flex-1">HP 64 Black & Tri-Color Ink Cartridges Printers (Combo Pack) | Works with Printe</h3>
+            <div class='text-yellow-400 text-sm mb-1'>★★★★½<span class='text-gray-400 text-xs ml-1'>4.6</span></div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-700">
+              <span class="text-2xl font-black text-white">$55.89</span>
+              <a href="https://www.amazon.com/HP-Tri-Color-Original-Cartridges-N9J90AN/dp/B06ZY9LP74/ref=zg_bs_g_office-products_d_sccl_6/132-7826456-1049511?psc=1" target="_blank" rel="noopener sponsored"
+                 class="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold text-sm px-4 py-2 rounded-xl transition-all duration-200">
+                <i class="fa-brands fa-amazon"></i>Buy Now
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="product-card group bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col" data-cat="Office_Products">
+          <div class="h-2 bg-gradient-to-r from-slate-500 to-gray-700"></div>
+          <div class="p-5 flex flex-col flex-1">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs text-gray-400 font-semibold uppercase tracking-wider">
+                <i class="fa-solid fa-briefcase mr-1"></i>Office Products
+              </span>
+              <span class="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full"><i class="fa-solid fa-arrow-trend-up mr-1"></i>Trending</span>
+            </div>
+            <h3 class="text-white font-semibold text-sm leading-snug mb-3 flex-1">HP 67 Black/Tri-Color Ink Cartridges (2-Pack) | Works with DeskJet 1255, 2700, 4</h3>
+            <div class='text-yellow-400 text-sm mb-1'>★★★★½<span class='text-gray-400 text-xs ml-1'>4.6</span></div>
+            <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-700">
+              <span class="text-2xl font-black text-white">$49.00</span>
+              <a href="https://www.amazon.com/HP-Cartridges-Black-Tri-Color-3YP29AN/dp/B08412HXK9/ref=zg_bs_g_office-products_d_sccl_2/132-7826456-1049511?psc=1" target="_blank" rel="noopener sponsored"
+                 class="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-bold text-sm px-4 py-2 rounded-xl transition-all duration-200">
+                <i class="fa-brands fa-amazon"></i>Buy Now
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="no-results" class="hidden text-center py-16 text-gray-500">
+        <i class="fa-solid fa-box-open text-4xl mb-3"></i>
+        <p>No products in this category yet.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-900 border-t border-gray-800 py-10 px-4 text-center">
+    <div class="max-w-3xl mx-auto">
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <i class="fa-brands fa-amazon text-yellow-400 text-xl"></i>
+        <span class="font-black text-white">Best Picks Hub</span>
+      </div>
+      <p class="text-gray-500 text-sm leading-relaxed">
+        <strong class="text-gray-400">Affiliate Disclosure:</strong> Best Picks Hub is a participant in the
+        Amazon Services LLC Associates Program. We earn commissions from qualifying purchases at no extra cost to you.
+      </p>
+      <p class="text-gray-600 text-xs mt-3">
+        &copy; 2026 Best Picks Hub &middot; Updated June 06, 2026
+      </p>
+    </div>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    // Init AOS
+    AOS.init({ duration: 600, once: true, offset: 60 });
+
+    // Init Swiper
+    new Swiper('.featuredSwiper', {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      pagination: { el: '.swiper-pagination', clickable: true },
+      autoplay: { delay: 4000, disableOnInteraction: false },
+      loop: true,
+      breakpoints: {
+        640:  { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+      }
+    });
+
+    // Category filter
+    function filterCat(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-btn'));
+      btn.classList.add('active-btn');
+      const cards = document.querySelectorAll('.product-card');
+      let visible = 0;
+      cards.forEach(c => {
+        const show = cat === 'all' || c.dataset.cat === cat;
+        c.style.display = show ? 'flex' : 'none';
+        if (show) visible++;
+      });
+      document.getElementById('no-results').classList.toggle('hidden', visible > 0);
+    }
+  </script>
 
 </body>
 </html>
